@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
+#import <Parse/Parse.h>
+
 
 @interface AppDelegate ()
 
@@ -42,7 +44,11 @@
     
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     
-
+    [Parse enableLocalDatastore];
+    [Parse setApplicationId:@"0DdW8BuS68J1D1y66h5SroE6DvHxqHTWHKgz4nh7"
+                  clientKey:@"aCOtDBhKgmQN8e90IivapDbhx9ssSgNtlWX2nn1Y"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
     return YES;
 }
 

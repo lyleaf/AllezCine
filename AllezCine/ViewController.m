@@ -21,6 +21,7 @@
     NSArray *faces;
     NSArray *cines;
     NSArray *times;
+    
 
 }
 
@@ -42,22 +43,53 @@
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"RDV"];
     self.rdv = [[managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
-    //[self.view reloadInputViews];
-   // [self.view setNeedsDisplay];
-    [self.view reloadInputViews];
-    //[self.view reloadData];
-    //[UITableView reloadData]
+    NSLog(@"Fetch %lu",(unsigned long)self.rdv.count);
+    
+
+    [self.accueilTableView reloadData];
+   
+    /*
+    
+    NSFetchRequest * allMovies = [[NSFetchRequest alloc] init];
+    [allMovies setEntity:[NSEntityDescription entityForName:@"RDV" inManagedObjectContext:managedObjectContext]];
+    [allMovies setIncludesPropertyValues:NO]; //only fetch the managedObjectID
+    
+    NSError * error = nil;
+    NSArray * movies = [managedObjectContext executeFetchRequest:allMovies error:&error];
+    //error handling goes here
+    for (NSManagedObject * movie in movies) {
+        [managedObjectContext deleteObject:movie];
+    }
+    NSError *saveError = nil;
+    [managedObjectContext save:&saveError];*/
+
+   // NSLog(@"TableView content hight %f",self.accueilTableView.contentSize.height);
+  //  NSLog(@"TableView bounds height %f",self.accueilTableView.bounds.size.height);
+
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     names = [NSArray arrayWithObjects:@"Michelle", @"Susan", @"Elisabeth", @"Jack", @"Mike",@"Michelle", @"Susan", @"Elisabeth", @"Jack", @"Mike",@"Michelle", @"Susan", @"Elisabeth", @"Jack", @"Mike",nil];
-    faces = [NSArray arrayWithObjects:@"01.jpg", @"02.jpg", @"03.jpg", @"04.jpg", @"05.jpg",@"01.jpg", @"02.jpg", @"03.jpg", @"04.jpg", @"05.jpg",@"01.jpg", @"02.jpg", @"03.jpg", @"04.jpg", @"05.jpg",nil];
+    faces = [NSArray arrayWithObjects:@"01.jpg", @"02.jpg", @"03.jpg", @"04.jpg", @"05.jpg",@"01.jpg", @"02.jpg", @"03.jpg", @"04.jpg", @"05.jpg",@"01.jpg", @"02.jpg", @"03.jpg", @"04.jpg", @"05.jpg",@"01.jpg", @"02.jpg", @"03.jpg", @"04.jpg", @"05.jpg",@"01.jpg", @"02.jpg", @"03.jpg", @"04.jpg", @"05.jpg",@"01.jpg", @"02.jpg", nil];
     cines = [NSArray arrayWithObjects:@"MK2 Bib", @"UGC Goblin", @"UGC Opera",@"MK2 Bib", @"UGC Goblin", @"UGC Opera",@"MK2 Bib", @"UGC Goblin", @"UGC Opera",@"MK2 Bib", @"UGC Goblin", @"UGC Opera",@"MK2 Bib", @"UGC Goblin", @"UGC Opera",nil];//@"MK2 Biblio", @"UGC Goblins", @"Gaumont Pathe", @"UGC Opera", @"Gaumont Pathe","MK2 Biblio", @"UGC Goblins", @"Gaumont Pathe", @"UGC Opera", @"Gaumont Pathe","MK2 Biblio", @"UGC Goblins", @"Gaumont Pathe", @"UGC Opera", @"Gaumont Pathe",nil];
     times= [NSArray arrayWithObjects:@"17h30", @"18h00", @"18h30", @"19h00", @"20h00",@"17h30", @"18h00", @"18h30", @"19h00", @"20h00",@"17h30", @"18h00", @"18h30", @"19h00", @"20h00",nil];
 
-    
+    self.accueilTableView.userInteractionEnabled = YES;
+    self.accueilTableView.scrollEnabled = YES;
+    self.accueilTableView.bounces = YES;
+    [self.accueilTableView setAlwaysBounceVertical:YES];
+    [self.view bringSubviewToFront:self.accueilTableView];
+   
+    [self.accueilTableView setContentSize:CGSizeMake(self.accueilTableView.contentSize.width, 2000.0f)];
 
+
+   // NSLog(@"View content width %f",self.view.contentSize.width);
+    NSLog(@"View bounds width %f",self.accueilTableView.bounds.size.width);
+    NSLog(@"TableView content hight %f",self.accueilTableView.contentSize.height);
+    NSLog(@"TableView bounds height %f",self.accueilTableView.bounds.size.height);
+
+   
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -82,13 +114,15 @@
 
     [cell.timeLabel setText:[NSString stringWithFormat:@"%@ ", [rdvCell valueForKey:@"time"]]];
     
-    
+    [cell.cineLabel setText:[NSString stringWithFormat:@"%@ ", [rdvCell valueForKey:@"cine"]]];
+    [cell.nameLabel setText:[NSString stringWithFormat:@"%@ ", [rdvCell valueForKey:@"film"]]];
 
-    cell.nameLabel.text = [names objectAtIndex:indexPath.row];
+
+   // cell.nameLabel.text = [names objectAtIndex:indexPath.row];
 
     cell.faceView.image = [UIImage imageNamed:[faces objectAtIndex:indexPath.row]];
     
-    cell.cineLabel.text = [cines objectAtIndex:indexPath.row];
+    //cell.cineLabel.text = [cines objectAtIndex:indexPath.row];
 
 
     return cell;
@@ -96,8 +130,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"The number is %lu",(unsigned long)self.rdv.count);
+    //NSLog(@"The number is %@",self.accueilTableView.scrollEnabled);
     return self.rdv.count;
 }
+
+
 
 @end
